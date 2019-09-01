@@ -427,7 +427,7 @@ function handleChat(username, message){
     //     });
     // }
 
-    if (getConfig()['root'].includes(username.toLowerCase())){
+    if (getConfig()['root'].map((r) => r.toLowerCase()).includes(username.toLowerCase())){
         if (command === 'say'){
             ProcessSendMessage(args.join(' '));
         }
