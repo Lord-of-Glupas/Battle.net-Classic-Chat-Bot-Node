@@ -20,8 +20,8 @@ function getConfig(){
 
 
 
-const config_db = require("./db.json");
-const mysql = require('mysql');
+// const config_db = require("./db.json");
+// const mysql = require('mysql');
 
 // var con = mysql.createConnection({
 //     host: config_db.database..host,
