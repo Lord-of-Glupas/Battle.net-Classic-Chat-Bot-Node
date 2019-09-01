@@ -18,6 +18,9 @@ Rename 'config.json.example' to 'config.json'
 Enter your API Key. ( Obtainable by typing /register-bot as chief in a Warcraft channel )
 Change 'clan_miss_ftw' to whatever you please to describe the bot which will now be known as <bot_name>.
 
+Run the following command(s):
+- npm install
+
 Supports multiple bots.
 
 #### To run:
