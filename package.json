@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Stannnnn/Battle.net-Classic-Chat-Bot-Node#readme",
   "dependencies": {
     "fs": "0.0.1-security",
+    "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "ws": "^6.1.3"
   },

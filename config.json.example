@@ -3,5 +3,6 @@
     "key": "00000000000000000000000000000000000000000000000000000000",
     "trigger": "!",
     "root": ["stann", "hardcoreone"]
+    "quotes": ["stann", "hardcoreone"]
   }
 }

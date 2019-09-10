@@ -1,6 +1,7 @@
 const WebSocket = require('ws');
 const fs = require('fs');
 const moment = require('moment');
+const _ = require('lodash');
 const config = require("./config.json");
 
 
@@ -53,6 +54,7 @@ function getConfig(){
 
 
 let botConfig = loadData() || {};
+let botQuotes = loadQuotes() || {};
 
 [/*`exit`, */`SIGINT`, `SIGUSR1`, `SIGUSR2`, `SIGTERM`].forEach((eventType) => {
     process.on(eventType, () => {
@@ -87,14 +89,41 @@ eval(fs.readFileSync('./bnetcontrol.js')+'');
 eval(fs.readFileSync('./functions.js')+'');
 
 function saveData(){
-    fs.writeFileSync("./data/" + botKey + "/state.json", JSON.stringify(botConfig));
+    writeFile("./data/" + botKey + "/state.json", botConfig);
     console.log("The file was saved!");
 }
 
 function loadData(){
-    if (fs.existsSync("./data/" + botKey + "/state.json")){
-        let data = fs.readFileSync("./data/" + botKey + "/state.json");
-        console.log("The file was loaded!");
+    let result = readFile("./data/" + botKey + "/state.json");
+
+    if (result !== null){
+        console.log("The file was loaded!")
+    }
+
+    return result;
+}
+
+function loadQuotes(){
+    return readFile("./data/" + botKey + "/quotes.json")
+}
+
+function addQuote(quote, username){
+    if (!botQuotes['quotes']){
+        botQuotes['quotes'] = []
+    }
+
+    botQuotes['quotes'].push({'quote': quote, username: username, date: moment()});
+    writeFile("./data/" + botKey + "/quotes.json", botQuotes);
+}
+
+function writeFile(file, data){
+    fs.writeFileSync(file, JSON.stringify(data));
+    return true;
+}
+
+function readFile(file){
+    if (fs.existsSync(file)){
+        let data = fs.readFileSync(file);
 
         if (data.length){
             return JSON.parse(data);
@@ -198,6 +227,7 @@ function ProcessSendMessage(text) {
         NotificationMessage('warning', 'Hint: You dont have to hit send, you can also hit enter.');
         return;
     }
+
     ProcessCommand(text);
     SendTextMessage(text);
 }
@@ -217,6 +247,7 @@ function ProcessCommand(text) {
         if (text.length < res[0].length + 1 || text.length == res[0].length + 1) {
             return;
         } //empty command
+
         $tempbuffer = text.substring(res[0].length + 1);
         userids = $GetUserIDsRegex($tempbuffer);
         if (!userids.length) {
@@ -233,6 +264,7 @@ function ProcessCommand(text) {
         if (text.length < res[0].length + 1 || text.length == res[0].length + 1) {
             return;
         } //empty command
+
         $tempbuffer = text.substring(res[0].length + 1);
         userid = $GetUserID($tempbuffer);
         if (userid == "-1") {
@@ -246,6 +278,7 @@ function ProcessCommand(text) {
         if (text.length < res[0].length + 1 || text.length == res[0].length + 1) {
             return;
         } //empty command
+
         $tempbuffer = text.substring(res[0].length + 1);
         SendUnbanMessage($tempbuffer);
         return;
@@ -254,6 +287,7 @@ function ProcessCommand(text) {
         if (text.length < res[0].length + 1 || text.length == res[0].length + 1) {
             return;
         } //empty command
+
         $tempbuffer = text.substring(res[0].length + 1);
         userid = $GetUserID($tempbuffer);
         if (userid == "-1") {
@@ -267,6 +301,7 @@ function ProcessCommand(text) {
         if (text.length < res[0].length + 1 || text.length == res[0].length + 1) {
             return;
         } //empty command
+
         $tempbuffer = text.substring(res[0].length + 1);
         userids = $GetUserIDsRegex($tempbuffer);
         if (!userids.length) {
@@ -283,6 +318,7 @@ function ProcessCommand(text) {
         if (text.length < res[0].length + 1 || text.length == res[0].length + 1) {
             return;
         } //empty command
+
         $tempbuffer = text.substring(res[0].length + 1);
 
         if (!botConfig['arkicklist']) {
@@ -305,6 +341,56 @@ function ProcessCommand(text) {
         });
         return;
     }
+
+    if (res[0].toLowerCase() == "/nab") {
+        ProcessSendMessage("#####            ###              #####                 ########");
+        ProcessSendMessage("### ###        ###            ###   ###              ###          ##");
+        ProcessSendMessage("###  ###       ###          ###       ###            ###          ##");
+        ProcessSendMessage("###    ###     ###        ###           ###          ########");
+        ProcessSendMessage("###      ###   ###      ############       ###          ##");
+        ProcessSendMessage("###        ### ###    ###                   ###      ###          ##");
+        ProcessSendMessage("###          #####    ###                       ###   ########");
+
+        return;
+    }
+}
+function ProcessCommandQuotes(text, username) {
+    if (text == undefined) {
+        return;
+    } //text is null
+    if (text.length < 1) {
+        return;
+    } //no text in the buffer
+    var $tempbuffer = "";
+    var userid;
+    var res = text.split(" ");
+
+    if (res[0].toLowerCase() == "/qu") {
+        if (!botQuotes['quotes']){
+            return
+        }
+
+        let quote = _.sample(botQuotes['quotes'].map((q, k) => {return {k: k+1, quote: q.quote}}));
+        ProcessSendMessage("/me " + quote.quote); // + " (" + quote.k + "/" + botQuotes['quotes'].length + ")");
+        return;
+    }
+
+    if (res[0].toLowerCase() == "/qa") {
+        let args = text.substring(res[0].length + 1);
+
+        if (args.trim().length){
+            addQuote(args, username);
+            ProcessSendMessage("/me Quote added.");
+        }
+
+        return;
+    }
+
+    // if (res[0].toLowerCase() == "/ql") {
+    //     ProcessSendMessage("/me There are " + botQuotes['quotes'].length + " quotes.");
+    //
+    //     return;
+    // }
 }
 
 function SendTextMessage(text) {
@@ -427,12 +513,16 @@ function handleChat(username, message){
     //     });
     // }
 
-    if (getConfig()['root'].map((r) => r.toLowerCase()).includes(username.toLowerCase())){
+    if (getConfig()['root'] && getConfig()['root'].map((r) => r.toLowerCase()).includes(username.toLowerCase())){
         if (command === 'say'){
             ProcessSendMessage(args.join(' '));
         }
 
-        ProcessCommand('/' + command + ' ' + args);
+        ProcessCommand('/' + command + ' ' + args.join(' '));
+    }
+
+    if (getConfig()['quotes'] && getConfig()['quotes'].map((r) => r.toLowerCase()).includes(username.toLowerCase())){
+        ProcessCommandQuotes('/' + command + ' ' + args.join(' '), username.toLowerCase());
     }
 }
 
