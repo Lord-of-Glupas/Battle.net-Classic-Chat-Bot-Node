@@ -353,6 +353,17 @@ function ProcessCommand(text) {
 
         return;
     }
+	
+	if (res[0].toLowerCase() == "/gay") {
+		ProcessSendMessage("      {#}{#}{#}{#}{#}                  {#}{#}{#}            {#}{#}             {#}{#}");
+		ProcessSendMessage("   {#}{#}        {#}{#}             {#}{#}  {#}{#}             {#}{#}       {#}{#}");
+		ProcessSendMessage(" {#}{#}                          {#}{#}       {#}{#}             {#}{#} {#}{#}");
+		ProcessSendMessage("{#}{#}      {#}{#}{#}{#}         {#}{#}{#}{#}{#}{#}{#}{#}              {#}{#}");
+		ProcessSendMessage(" {#}{#}          {#}{#}       {#}{#}              {#}{#}             {#}{#}");
+		ProcessSendMessage("    {#}{#}{#}{#}{#}{#}       {#}{#}                   {#}{#}          {#}{#}");
+		
+		return;
+		
 }
 function ProcessCommandQuotes(text, username) {
     if (text == undefined) {
