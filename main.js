@@ -355,12 +355,12 @@ function ProcessCommand(text) {
     }
 	
 	if (res[0].toLowerCase() == "/gay") {
-		ProcessSendMessage("      {#}{#}{#}{#}{#}                  {#}{#}{#}            {#}{#}             {#}{#}");
-		ProcessSendMessage("   {#}{#}        {#}{#}             {#}{#}  {#}{#}             {#}{#}       {#}{#}");
-		ProcessSendMessage(" {#}{#}                          {#}{#}       {#}{#}             {#}{#} {#}{#}");
-		ProcessSendMessage("{#}{#}      {#}{#}{#}{#}         {#}{#}{#}{#}{#}{#}{#}{#}              {#}{#}");
-		ProcessSendMessage(" {#}{#}          {#}{#}       {#}{#}              {#}{#}             {#}{#}");
-		ProcessSendMessage("    {#}{#}{#}{#}{#}{#}       {#}{#}                   {#}{#}          {#}{#}");
+		ProcessSendMessage("      #####                  ###            ##             ##");
+		ProcessSendMessage("   ##        ##             ##  ##             ##       ##");
+		ProcessSendMessage(" ##                          ##       ##             ## ##");
+		ProcessSendMessage("##      ####         ########              ##");
+		ProcessSendMessage(" ##          ##       ##              ##             ##");
+		ProcessSendMessage("    ######       ##                   ##          ##");
 		
 		return;
 		
