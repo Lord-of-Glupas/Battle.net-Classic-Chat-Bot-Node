@@ -376,7 +376,7 @@ function ProcessCommand(text) {
         ProcessSendMessage(" ##                          ##       ##             ## ##");
         ProcessSendMessage("##      ####         ########              ##");
         ProcessSendMessage(" ##          ##       ##              ##             ##");
-        ProcessSendMessage("    ######       ##                   ##          ##");
+        ProcessSendMessage("    ######       ##                  ##           ##");
 
         return;
     }
@@ -391,7 +391,8 @@ function ProcessCommand(text) {
 
         return;
     }
-		
+	
+	
 }
 function ProcessCommandQuotes(text, username) {
     if (text == undefined) {
